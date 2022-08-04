@@ -16,19 +16,8 @@ header = {
     'User-Agent':'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:63.0) Gecko/20100101 Firefox/63.0'
 }
 
-rss = PyRSS2Gen.RSS2(
-        title = "HMC NEWS",
-        link = "Naver.com",
-        description = "HMC NEWS",
-        lastBuildDate = datetime.datetime.now(),
-        items = [] )
 
-rss2 = PyRSS2Gen.RSS2(
-        title = "KMC NEWS",
-        link = "Naver.com",
-        description = "KMC NEWS",
-        lastBuildDate = datetime.datetime.now(),
-        items = [] )
+
 
 urls_hmc = ["https://m.search.naver.com/search.naver?where=m_news&query=%ED%98%84%EB%8C%80%EC%9E%90%EB%8F%99%EC%B0%A8&sm=mtb_opt&sort=0&photo=0&field=0&pd=0&ds=&de=&docid=&related=0&mynews=0&office_type=&office_section_code=&news_office_checked=&nso=",
 'https://m.search.naver.com/search.naver?where=m_news&sm=mtb_pge&query=%ED%98%84%EB%8C%80%EC%9E%90%EB%8F%99%EC%B0%A8&sort=0&photo=0&field=0&pd=0&ds=&de=&cluster_rank=30&mynews=0&office_type=0&office_section_code=0&news_office_checked=&nso=so:r,p:all&start=16',
@@ -103,6 +92,12 @@ def check_d2(link):
         return cur.fetchall()
 
 def get_hmc():
+    rss = PyRSS2Gen.RSS2(
+        title = "HMC NEWS",
+        link = "Naver.com",
+        description = "HMC NEWS",
+        lastBuildDate = datetime.datetime.now(),
+        items = [] )
     with requests.Session() as s:
         for url_hmc in urls_hmc:
             html_hmc = s.get(url_hmc, headers=header)
@@ -142,6 +137,12 @@ def get_hmc():
 
 
 def get_kmc():
+    rss2 = PyRSS2Gen.RSS2(
+        title = "KMC NEWS",
+        link = "Naver.com",
+        description = "KMC NEWS",
+        lastBuildDate = datetime.datetime.now(),
+        items = [] )
     with requests.Session() as s:
         for url_hmc in urls_kmc:
             html_hmc = s.get(url_hmc, headers=header)
@@ -181,8 +182,8 @@ def get_kmc():
 
 scheduler = APScheduler()
 scheduler.init_app(app)
-scheduler.add_job(func=get_hmc, trigger='interval', id='job3', minutes=2, next_run_time=datetime.datetime.now())
-scheduler.add_job(func=get_kmc, trigger='interval', id='job4', minutes=2, next_run_time=datetime.datetime.now() + datetime.timedelta(minutes=1))
+scheduler.add_job(func=get_hmc, trigger='interval', id='job3', minutes=60, next_run_time=datetime.datetime.now())
+scheduler.add_job(func=get_kmc, trigger='interval', id='job4', minutes=60, next_run_time=datetime.datetime.now() + datetime.timedelta(minutes=1))
 scheduler.start()
 
 if __name__ == '__main__':
