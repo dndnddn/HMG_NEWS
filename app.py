@@ -179,10 +179,12 @@ def get_kmc():
             rss.items.append(item)
     rss2.write_xml(open('./templates/kmcnews.xml', 'w', -1, "UTF-8"), encoding = 'UTF-8')
 
+scheduler = APScheduler()
+scheduler.init_app(app)
+scheduler.add_job(func=get_hmc, trigger='interval', id='job3', minutes=60, next_run_time=datetime.datetime.now())
+scheduler.add_job(func=get_kmc, trigger='interval', id='job4', minutes=60, next_run_time=datetime.datetime.now() + datetime.timedelta(minutes=5))
+scheduler.start()
+
 if __name__ == '__main__':
-    init_db()    
-    scheduler = APScheduler()
-    scheduler.add_job(func=get_hmc, trigger='interval', id='job3', minutes=60, next_run_time=datetime.datetime.now())
-    scheduler.add_job(func=get_kmc, trigger='interval', id='job4', minutes=60, next_run_time=datetime.datetime.now() + datetime.timedelta(minutes=5))
-    scheduler.start()
+    # init_db()    
     app.run()
