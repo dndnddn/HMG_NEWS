@@ -176,7 +176,7 @@ def get_kmc():
                         guid = PyRSS2Gen.Guid(link,0),
                         description= text,
                         pubDate = date)
-            rss.items.append(item)
+            rss2.items.append(item)
     rss2.write_xml(open('./templates/kmcnews.xml', 'w', -1, "UTF-8"), encoding = 'UTF-8')
 
 scheduler = APScheduler()
