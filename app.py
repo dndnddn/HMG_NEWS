@@ -140,6 +140,7 @@ def get_hmc():
             rss.items.append(item)
     rss.write_xml(open('./templates/hmcnews.xml', 'w', -1, "UTF-8"), encoding = 'UTF-8')
 
+
 def get_kmc():
     with requests.Session() as s:
         for url_hmc in urls_kmc:
@@ -169,7 +170,6 @@ def get_kmc():
         cur2 = c.execute("DELETE FROM entries2 WHERE date <=  datetime('now', '-5 days')")
         conn.commit()
         for title,link,date,text in fetch:
-            print(title,link,date,text)
             item = PyRSS2Gen.RSSItem(
                         title = title,
                         link = link,
@@ -181,8 +181,8 @@ def get_kmc():
 
 scheduler = APScheduler()
 scheduler.init_app(app)
-scheduler.add_job(func=get_hmc, trigger='interval', id='job3', minutes=60, next_run_time=datetime.datetime.now())
-scheduler.add_job(func=get_kmc, trigger='interval', id='job4', minutes=60, next_run_time=datetime.datetime.now() + datetime.timedelta(minutes=5))
+scheduler.add_job(func=get_hmc, trigger='interval', id='job3', minutes=2, next_run_time=datetime.datetime.now())
+scheduler.add_job(func=get_kmc, trigger='interval', id='job4', minutes=2, next_run_time=datetime.datetime.now() + datetime.timedelta(minutes=1))
 scheduler.start()
 
 if __name__ == '__main__':
